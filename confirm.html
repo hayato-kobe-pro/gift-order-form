@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>申し込み確認</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1f3c88;
+    }
+
+    .page-description {
+      margin-bottom: 32px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1f3c88;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 16px;
+      align-items: end;
+      flex-wrap: wrap;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .required {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 12px;
+      color: #fff;
+      background: #e53935;
+      padding: 2px 6px;
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cfd7e6;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3f6ed8;
+      box-shadow: 0 0 0 3px rgba(63, 110, 216, 0.12);
+    }
+
+    .btn-confirm {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      background: #1f3c88;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-confirm:hover {
+      opacity: 0.92;
+    }
+
+    .history-section {
+      display: none;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 32px;
+    }
+
+    .history-section.is-visible {
+      display: block;
+    }
+
+    .history-section .section-title {
+      margin-bottom: 20px;
+    }
+
+    .history-empty {
+      color: #666;
+      font-size: 14px;
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    .history-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .history-item {
+      border: 1px solid #e7ebf3;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      background: #fafcff;
+    }
+
+    .history-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .history-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e7ebf3;
+    }
+
+    .history-item-id {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f3c88;
+    }
+
+    .history-item-status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .history-item-status.completed {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .history-item-status.processing {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .history-item-status.shipped {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .history-item-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px 24px;
+      font-size: 14px;
+    }
+
+    .history-item-body .label {
+      color: #666;
+    }
+
+    .history-item-body .value {
+      color: #222;
+    }
+
+    .history-item-products {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #e7ebf3;
+    }
+
+    .history-item-products-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .history-product-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .history-product-table th,
+    .history-product-table td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #e7ebf3;
+    }
+
+    .history-product-table th {
+      background: #f5f7fb;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .history-product-table td {
+      color: #222;
+    }
+
+    .history-item-total {
+      margin-top: 10px;
+      text-align: right;
+      font-weight: 700;
+      font-size: 14px;
+      color: #1f3c88;
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: #ffebee;
+      color: #c62828;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .error-message.is-visible {
+      display: block;
+    }
+
+    .link-back {
+      display: inline-block;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #1f3c88;
+      text-decoration: none;
+    }
+
+    .link-back:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-confirm {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="form.html" class="link-back">← 申し込みフォームへ</a>
+
+    <h1 class="page-title">申し込み確認</h1>
+    <p class="page-description">
+      お客様番号と電話番号を入力いただくと、申し込み履歴を表示します。
+    </p>
+
+    <div class="form-card">
+      <h2 class="section-title">照会条件</h2>
+      <div class="input-row">
+        <div class="field">
+          <label for="customerNo">お客様番号<span class="required">必須</span></label>
+          <input type="text" id="customerNo" name="customerNo" placeholder="例：12345678" />
+        </div>
+        <div class="field">
+          <label for="tel">電話番号<span class="required">必須</span></label>
+          <input type="tel" id="tel" name="tel" placeholder="例：03-1234-5678" />
+        </div>
+        <div class="field">
+          <button type="button" class="btn-confirm" id="btnConfirm">確認する</button>
+        </div>
+      </div>
+      <div class="error-message" id="errorMessage">
+        お客様番号と電話番号の両方を入力してください。
+      </div>
+    </div>
+
+    <div class="history-section" id="historySection">
+      <h2 class="section-title">申し込み履歴</h2>
+      <ul class="history-list" id="historyList">
+        <!-- サンプルデータ（JSで表示） -->
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var customerNoInput = document.getElementById('customerNo');
+      var telInput = document.getElementById('tel');
+      var btnConfirm = document.getElementById('btnConfirm');
+      var errorMessage = document.getElementById('errorMessage');
+      var historySection = document.getElementById('historySection');
+      var historyList = document.getElementById('historyList');
+
+      var sampleHistory = [
+        {
+          id: 'APL-2025-001234',
+          date: '2025年3月1日',
+          status: 'completed',
+          statusLabel: '完了',
+          amount: '6,000円',
+          deliveryDate: '2025年3月15日',
+          deliveryAddress: '東京都渋谷区神宮前1-2-3',
+          deliveryName: '山田 花子',
+          paymentMethod: 'クレジットカード',
+          deliveryTime: '14時〜16時',
+          products: [
+            { productNo: 'ABC-001', quantity: 1, unitPrice: '3,000円', amount: '3,000円' },
+            { productNo: 'ABC-002', quantity: 1, unitPrice: '3,000円', amount: '3,000円' }
+          ]
+        },
+        {
+          id: 'APL-2025-001189',
+          date: '2025年2月20日',
+          status: 'shipped',
+          statusLabel: '発送済み',
+          amount: '3,000円',
+          deliveryDate: '2025年2月28日',
+          deliveryAddress: '東京都渋谷区神宮前1-2-3',
+          deliveryName: '山田 花子',
+          paymentMethod: '銀行振込',
+          deliveryTime: '午前中',
+          products: [
+            { productNo: 'ABC-001', quantity: 1, unitPrice: '3,000円', amount: '3,000円' }
+          ]
+        },
+        {
+          id: 'APL-2025-001056',
+          date: '2025年2月5日',
+          status: 'processing',
+          statusLabel: '処理中',
+          amount: '9,000円',
+          deliveryDate: '2025年2月20日',
+          deliveryAddress: '東京都千代田区丸の内2-1-1',
+          deliveryName: '株式会社サンプル',
+          paymentMethod: '代金引換',
+          deliveryTime: '16時〜18時',
+          products: [
+            { productNo: 'ABC-001', quantity: 2, unitPrice: '3,000円', amount: '6,000円' },
+            { productNo: 'ABC-003', quantity: 1, unitPrice: '3,000円', amount: '3,000円' }
+          ]
+        }
+      ];
+
+      function hideError() {
+        errorMessage.classList.remove('is-visible');
+      }
+
+      function showError() {
+        errorMessage.classList.add('is-visible');
+      }
+
+      function renderHistory(items) {
+        historyList.innerHTML = items.map(function (item) {
+          var statusClass = item.status || 'processing';
+          var products = item.products || [];
+          var productRows = products.map(function (p) {
+            return '<tr><td>' + p.productNo + '</td><td>' + p.quantity + '</td><td>' + p.unitPrice + '</td><td>' + p.amount + '</td></tr>';
+          }).join('');
+          var productTable = products.length ? '<div class="history-item-products">' +
+            '<div class="history-item-products-title">商品情報</div>' +
+            '<table class="history-product-table">' +
+              '<thead><tr><th>品番</th><th>数量</th><th>単価</th><th>金額</th></tr></thead>' +
+              '<tbody>' + productRows + '</tbody>' +
+            '</table>' +
+            '<div class="history-item-total">合計 ' + item.amount + '</div>' +
+            '</div>' : '';
+          return '<li class="history-item">' +
+            '<div class="history-item-header">' +
+              '<span class="history-item-id">' + item.id + '</span>' +
+              '<span class="history-item-status ' + statusClass + '">' + item.statusLabel + '</span>' +
+            '</div>' +
+            '<div class="history-item-body">' +
+              '<div><span class="label">申込日</span><br /><span class="value">' + item.date + '</span></div>' +
+              '<div><span class="label">配送希望日</span><br /><span class="value">' + item.deliveryDate + '</span></div>' +
+              '<div><span class="label">配送時間</span><br /><span class="value">' + (item.deliveryTime || '—') + '</span></div>' +
+              '<div><span class="label">宛名</span><br /><span class="value">' + (item.deliveryName || '—') + '</span></div>' +
+              '<div><span class="label">お届け先</span><br /><span class="value">' + item.deliveryAddress + '</span></div>' +
+              '<div><span class="label">決済方法</span><br /><span class="value">' + (item.paymentMethod || '—') + '</span></div>' +
+            '</div>' +
+            productTable +
+          '</li>';
+        }).join('');
+      }
+
+      btnConfirm.addEventListener('click', function () {
+        hideError();
+        var no = (customerNoInput.value || '').trim();
+        var tel = (telInput.value || '').trim();
+        if (!no || !tel) {
+          showError();
+          return;
+        }
+        renderHistory(sampleHistory);
+        historySection.classList.add('is-visible');
+        historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+  </script>
+</body>
+</html>

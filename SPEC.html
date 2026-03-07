@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ご進物申込・申し込み確認 画面仕様書</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      background: #f8f9fa;
+    }
+    .doc {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      background: #fff;
+      box-shadow: 0 0 24px rgba(0,0,0,0.06);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #1f3c88;
+    }
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1f3c88;
+      margin: 40px 0 16px;
+    }
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #333;
+      margin: 24px 0 10px;
+    }
+    p {
+      margin: 0 0 12px;
+      font-size: 15px;
+    }
+    .lead {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 32px;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 32px 0;
+    }
+    ul {
+      margin: 0 0 16px;
+      padding-left: 1.5em;
+    }
+    li {
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+    strong { font-weight: 700; color: #222; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f0f4ff;
+      font-weight: 600;
+      color: #1f3c88;
+    }
+    td { background: #fff; }
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 14px;
+      color: #555;
+    }
+    @media (max-width: 600px) {
+      .doc { padding: 24px 16px 40px; }
+      h1 { font-size: 24px; }
+      h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="doc">
+    <h1>ご進物申込・申し込み確認 画面仕様書</h1>
+    <p class="lead">
+      本資料は、お中元・お歳暮などのご進物申込をオンライン化するための画面仕様の概要をまとめたものです。<br />
+      本資料では、画面の構成や利用イメージを整理しており、技術的な実装詳細は含めておりません。
+    </p>
+
+    <hr />
+
+    <h2>1. 背景・目的</h2>
+    <p>現在、紙の申込用紙にて受け付けているご進物の申し込みを、オンライン上で入力・確認できる仕組みに変更することを目的としています。</p>
+    <p>今回の構想では、以下の内容を想定しています。</p>
+    <ul>
+      <li>お客様がオンライン画面から申し込み内容を入力できる</li>
+      <li>入力内容を確認して申し込みを送信できる</li>
+      <li>過去の申し込み履歴を参照して、商品や配送先を選択できる</li>
+    </ul>
+    <p>なお、本構想では以下の機能は対象外と想定しています。</p>
+    <ul>
+      <li>管理画面の構築</li>
+      <li>在庫管理</li>
+      <li>商品管理</li>
+    </ul>
+    <p>あくまで、<strong>紙の申込用紙を電子化するためのシンプルな申し込み機能</strong>を想定しています。</p>
+
+    <hr />
+
+    <h2>2. 過去申し込みデータのご提供のお願い</h2>
+    <p>今回の仕組みでは、過去の申し込み履歴を利用して、</p>
+    <ul>
+      <li>過去に購入した商品</li>
+      <li>過去のお届け先</li>
+    </ul>
+    <p>をオンライン画面上で選択できるようにすることを想定しています。</p>
+    <p>そのため、初期対応として、以下のデータをご提供いただくことをお願いしております。</p>
+
+    <h3>ご提供いただきたいデータ（例）</h3>
+    <ul>
+      <li>お客様番号</li>
+      <li>お客様氏名</li>
+      <li>電話番号</li>
+      <li>申込日</li>
+      <li>商品情報（品番・数量・単価など）</li>
+      <li>配送先情報（宛名・住所など）</li>
+      <li>配送希望日</li>
+      <li>決済方法</li>
+    </ul>
+    <p>上記のデータを、当社指定のフォーマット（Excel / CSV 形式）にてご提供いただくことを想定しています。</p>
+    <p>フォーマットの詳細については、別途ご提示させていただく予定です。</p>
+
+    <hr />
+
+    <h2>3. 画面構成</h2>
+    <p>本システムは、以下の3つの画面で構成されます。</p>
+    <table>
+      <thead>
+        <tr><th>画面名</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>申し込みフォーム</td><td>お客様が進物を申し込む入力画面（ステップ形式）</td></tr>
+        <tr><td>申し込み完了画面</td><td>申し込み送信後に表示される完了画面</td></tr>
+        <tr><td>申し込み確認画面</td><td>過去の申し込み履歴を確認する画面</td></tr>
+      </tbody>
+    </table>
+
+    <hr />
+
+    <h2>4. 申し込みフォーム</h2>
+
+    <h3>利用者</h3>
+    <p>お客様（進物の申し込みを行う方）</p>
+
+    <h3>機能</h3>
+    <p>進物の申し込みを、以下のステップに沿って入力・送信します。</p>
+    <table>
+      <thead>
+        <tr><th>ステップ</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1. お客様情報</td><td>お客様番号・電話番号を入力し、過去情報を参照。氏名・住所などを入力または自動反映</td></tr>
+        <tr><td>2. 商品注文</td><td>過去履歴から商品を選択、または新規で商品を入力</td></tr>
+        <tr><td>3. お届け先</td><td>過去の配送先を選択、または新規入力</td></tr>
+        <tr><td>4. 決済方法</td><td>クレジットカード・銀行振込・代金引換から選択</td></tr>
+        <tr><td>5. 利用規約同意</td><td>利用規約および個人情報の取り扱いに同意</td></tr>
+        <tr><td>6. 注文確認</td><td>入力内容を確認し、申し込みを送信</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4-1. お客様情報</h3>
+    <p><strong>入力項目</strong></p>
+    <ul>
+      <li>お客様番号</li>
+      <li>電話番号</li>
+      <li>姓</li>
+      <li>名</li>
+      <li>フリガナ</li>
+      <li>郵便番号</li>
+      <li>住所</li>
+    </ul>
+    <p class="note">お客様番号と電話番号を入力すると、過去の登録情報を参照し、氏名・住所などの情報が自動入力されることを想定しています。</p>
+
+    <h3>4-2. 商品注文</h3>
+    <p>商品は以下の方法で選択します。</p>
+    <table>
+      <thead>
+        <tr><th>選択方法</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>過去履歴から選択</td><td>過去に購入した商品一覧から選択</td></tr>
+        <tr><td>新規入力</td><td>品番を入力して商品を登録</td></tr>
+      </tbody>
+    </table>
+    <p><strong>入力項目</strong></p>
+    <ul>
+      <li>品番</li>
+      <li>数量</li>
+      <li>単価</li>
+      <li>金額（自動計算）</li>
+    </ul>
+    <p class="note">※複数商品の追加が可能な構成を想定しています。</p>
+
+    <h3>4-3. お届け先</h3>
+    <p>配送先は以下の方法で指定します。</p>
+    <table>
+      <thead>
+        <tr><th>選択方法</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>過去履歴から選択</td><td>過去に利用した配送先から選択</td></tr>
+        <tr><td>新規入力</td><td>新しい配送先を入力</td></tr>
+      </tbody>
+    </table>
+    <p><strong>入力項目</strong></p>
+    <ul>
+      <li>郵便番号</li>
+      <li>住所</li>
+      <li>宛名</li>
+      <li>フリガナ</li>
+      <li>配送希望日</li>
+      <li>配送時間</li>
+    </ul>
+
+    <h3>4-4. 決済方法</h3>
+    <p>選択可能な決済方法</p>
+    <ul>
+      <li>クレジットカード</li>
+      <li>銀行振込</li>
+      <li>代金引換</li>
+    </ul>
+    <p>クレジットカードを選択した場合は、申し込み送信後に外部の決済画面へ遷移する想定です。</p>
+
+    <h3>4-5. 利用規約同意</h3>
+    <p>申し込みを行う前に、</p>
+    <ul>
+      <li>利用規約</li>
+      <li>個人情報の取り扱い</li>
+    </ul>
+    <p>への同意を求めるチェック項目を設置します。</p>
+
+    <h3>4-6. 注文確認</h3>
+    <p>申し込み内容を最終確認する画面です。</p>
+    <p><strong>確認内容（例）</strong></p>
+    <ul>
+      <li>お客様情報</li>
+      <li>商品情報</li>
+      <li>配送先</li>
+      <li>決済方法</li>
+      <li>合計金額</li>
+    </ul>
+    <p>「この内容で申し込む」を押すと、申し込みが送信されます。</p>
+
+    <hr />
+
+    <h2>5. 申し込み完了画面</h2>
+
+    <h3>表示タイミング</h3>
+    <p>申し込みフォーム送信後に表示されます。<br />（クレジット決済の場合は決済処理後）</p>
+
+    <h3>表示内容</h3>
+    <ul>
+      <li>「申し込みが完了しました」というメッセージ</li>
+      <li>申し込み完了メールを送信した旨の案内</li>
+      <li>メールが届かない場合の確認事項</li>
+    </ul>
+
+    <h3>完了メール送信（想定）</h3>
+    <p>申し込み完了時に、<strong>お客様のメールアドレスへ自動で完了メールを送信することを想定しています。</strong></p>
+    <p><strong>メール内容（例）</strong></p>
+    <ul>
+      <li>申し込み番号</li>
+      <li>申し込み内容の概要</li>
+      <li>今後の流れ</li>
+      <li>お問い合わせ先</li>
+    </ul>
+
+    <hr />
+
+    <h2>6. 申し込み確認画面</h2>
+
+    <h3>利用者</h3>
+    <p>お客様（過去の申し込み履歴を確認したい方）</p>
+
+    <h3>利用方法</h3>
+    <p>以下の情報を入力して履歴を確認します。</p>
+    <ul>
+      <li>お客様番号</li>
+      <li>電話番号</li>
+    </ul>
+
+    <h3>表示内容</h3>
+    <p>該当するお客様の申し込み履歴が一覧表示されます。</p>
+    <p><strong>申し込み情報</strong></p>
+    <ul>
+      <li>申込番号</li>
+      <li>ステータス（完了 / 処理中 / 発送済み）</li>
+      <li>申込日</li>
+      <li>配送希望日</li>
+      <li>配送時間</li>
+      <li>宛名</li>
+      <li>配送先住所</li>
+      <li>決済方法</li>
+    </ul>
+    <p><strong>商品情報</strong></p>
+    <ul>
+      <li>品番</li>
+      <li>数量</li>
+      <li>単価</li>
+      <li>金額</li>
+      <li>合計金額</li>
+    </ul>
+
+    <hr />
+
+    <p class="doc-footer">
+      以上が、現時点で想定している画面仕様の概要となります。<br />
+      詳細な画面デザインやデータ連携仕様については、今後のお打ち合わせの中で整理させていただければと考えております。
+    </p>
+  </div>
+</body>
+</html>
