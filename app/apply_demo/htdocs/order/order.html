@@ -29,26 +29,13 @@
 
     <main class="container">
         <header class="app-page-header">
-            <h1 class="app-page-heading">ご進物のご注文</h1>
+            <h1 class="app-page-heading">注文履歴</h1>
         </header>
-        <div class="order-thumbnail" aria-hidden="true"></div>
-        <section class="quick-order-section">
-            <div class="section-inner section-inner--quickOrder">
-                <div>
-                    <h2 class="card-title card-title--quickOrder">ご注文の新規追加</h2>
-                    <p class="page-lead page-lead--quickOrder">カタログ掲載の商品番号を入力してお申し込みいただけます。</p>
-                </div>
-                <div class="action-area center action-area--quickOrder">
-                    <a href="new.html" class="btn btn-primary btn-wide">
-                        新規ご注文
-                    </a>
-                </div>
-            </div>
-        </section>
+        
 
         <section class="history-section">
-            <h2 class="card-title card-title--quickOrder">注文履歴から再注文</h2>
-            <p class="page-lead page-lead--quickOrder">過去にお届けした内容と同じものを、そのまま再注文いただけます。</p>
+          
+            
 
             <div class="order-history-list">
                 <table class="order-history-table">
@@ -58,7 +45,6 @@
                             <th scope="col">宛名</th>
                             <th scope="col">注文内容</th>
                             <th scope="col" class="order-history-table__th-detail">詳細</th>
-                            <th scope="col">再注文</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,9 +73,6 @@
                                     data-detail-tel="03-1234-5678"
                                     data-detail-items='[{"code":"A-101","name":"プレミアムカタログギフト（和・山吹）","qty":"1","subtotal":"2,000円"}]'>詳細</button>
                             </td>
-                            <td class="order-history-table__action">
-                                <a href="reorder.html" class="btn btn-primary order-history-table__reorder">同一内容で注文</a>
-                            </td>
                         </tr>
                         <tr>
                             <td class="order-history-table__date">2023.11.15</td>
@@ -115,9 +98,6 @@
                                     data-detail-address="大阪府大阪市北区梅田2-4-9 サンプルビル 3F"
                                     data-detail-tel="06-9876-5432"
                                     data-detail-items='[{"code":"B-205","name":"カタログギフト「楓」","qty":"2","subtotal":"11,000円"}]'>詳細</button>
-                            </td>
-                            <td class="order-history-table__action">
-                                <a href="reorder.html" class="btn btn-primary order-history-table__reorder">同一内容で注文</a>
                             </td>
                         </tr>
                         <tr>
@@ -145,9 +125,6 @@
                                     data-detail-tel="052-111-2222"
                                     data-detail-items='[{"code":"S-500","name":"進物セット 特撰","qty":"10","subtotal":"220,000円"}]'>詳細</button>
                             </td>
-                            <td class="order-history-table__action">
-                                <a href="reorder.html" class="btn btn-primary order-history-table__reorder">同一内容で注文</a>
-                            </td>
                         </tr>
                         <tr>
                             <td class="order-history-table__date">2023.08.19</td>
@@ -174,9 +151,6 @@
                                     data-detail-tel="03-3333-4444"
                                     data-detail-items='[{"code":"C-333","name":"のり詰め合わせ 極み","qty":"1","subtotal":"3,300円"}]'>詳細</button>
                             </td>
-                            <td class="order-history-table__action">
-                                <a href="reorder.html" class="btn btn-primary order-history-table__reorder">同一内容で注文</a>
-                            </td>
                         </tr>
                         <tr>
                             <td class="order-history-table__date">2023.07.05</td>
@@ -202,9 +176,6 @@
                                     data-detail-address="東京都品川区上大崎2-25-2 グローバルタワー 12F"
                                     data-detail-tel="03-5555-6666"
                                     data-detail-items='[{"code":"A-102","name":"プレミアムカタログギフト（洋・アイボリー）","qty":"5","subtotal":"27,500円"}]'>詳細</button>
-                            </td>
-                            <td class="order-history-table__action">
-                                <a href="reorder.html" class="btn btn-primary order-history-table__reorder">同一内容で注文</a>
                             </td>
                         </tr>
                     </tbody>

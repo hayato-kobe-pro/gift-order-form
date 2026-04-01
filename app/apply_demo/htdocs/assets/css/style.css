@@ -145,6 +145,10 @@ body.has-fixed-app-header {
     padding: 0 20px 100px;
 }
 
+.container--login{
+    max-width: 800px;
+}
+
 .login-wrapper {
     display: flex;
     justify-content: center;

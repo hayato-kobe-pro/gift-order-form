@@ -15,7 +15,7 @@
 
     <header class="app-fixed-header">
         <div class="app-fixed-header__inner">
-            <a href="order_list.html" class="app-fixed-header__logo">
+            <a href="/app/apply_demo/htdocs/order/index.html" class="app-fixed-header__logo">
                 <img src="../assets/img/logo.png" width="200" height="40" alt="ご進物お申込み">
             </a>
             <nav class="app-fixed-header__nav">
@@ -136,6 +136,45 @@
                     </section>
 
                     <section class="setup-section">
+                        <div class="setup-section-header">
+                            <h2 class="setup-section-title serif">ご用途・のし</h2>
+                        </div>
+                        <div class="setup-card">
+                            <div class="form-group">
+                                <label>ご用途・のしの種類</label>
+                                <select name="noshi_purpose" class="input-underline">
+                                    <option value="">選択してください</option>
+                                    <option>お中元</option>
+                                    <option>お歳暮</option>
+                                    <option>お年賀</option>
+                                    <option>無地のし（赤）</option>
+                                    <option>無地のし（黒）</option>
+                                    <option>その他</option>
+                                    <option>のし不要</option>
+                                </select>
+                            </div>
+                            <div class="form-group" data-noshi-purpose-other style="display: none;">
+                                <label>ご用途（その他の場合）</label>
+                                <input type="text" name="noshi_purpose_other" class="input-underline" placeholder="ご用途をご記入ください。">
+                            </div>
+                            <div class="form-group">
+                                <label>名入れ</label>
+                                <select name="noshi_name_type" class="input-underline">
+                                    <option value="">選択してください</option>
+                                    <option>不要</option>
+                                    <option>フルネーム</option>
+                                    <option>苗字のみ</option>
+                                    <option>その他</option>
+                                </select>
+                            </div>
+                            <div class="form-group" data-noshi-name-other style="display: none;">
+                                <label>名入れ（その他の場合）</label>
+                                <input type="text" name="noshi_name_other" class="input-underline" placeholder="名入れ内容をご記入ください。">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="setup-section">
                         <h2 class="setup-section-title serif setup-section-title-delivery">お届け希望日時の指定</h2>
                         <div class="setup-card">
                             <div class="form-row">
@@ -201,7 +240,7 @@
     </main>
 
     <footer class="site-footer">
-        <p class="copyright">&copy; ご進物お申込み All Rights Reserved.</p>
+        <p class="copyright">©MARUYAMA NORI.Co.,Ltd. All rights reserved.</p>
     </footer>
 
     <script>
@@ -455,6 +494,43 @@
 
             initPrefilledRows();
             refreshOrderSummary();
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var noshiPurposeSelect = document.querySelector('select[name="noshi_purpose"]');
+            var noshiPurposeOtherGroup = document.querySelector('[data-noshi-purpose-other]');
+            var noshiNameSelect = document.querySelector('select[name="noshi_name_type"]');
+            var noshiNameOtherGroup = document.querySelector('[data-noshi-name-other]');
+
+            function updateNoshiPurposeOtherVisibility() {
+                if (!noshiPurposeSelect || !noshiPurposeOtherGroup) return;
+                if (noshiPurposeSelect.value === 'その他') {
+                    noshiPurposeOtherGroup.style.display = '';
+                } else {
+                    noshiPurposeOtherGroup.style.display = 'none';
+                }
+            }
+
+            function updateNoshiNameOtherVisibility() {
+                if (!noshiNameSelect || !noshiNameOtherGroup) return;
+                if (noshiNameSelect.value === 'その他') {
+                    noshiNameOtherGroup.style.display = '';
+                } else {
+                    noshiNameOtherGroup.style.display = 'none';
+                }
+            }
+
+            if (noshiPurposeSelect) {
+                noshiPurposeSelect.addEventListener('change', updateNoshiPurposeOtherVisibility);
+                updateNoshiPurposeOtherVisibility();
+            }
+
+            if (noshiNameSelect) {
+                noshiNameSelect.addEventListener('change', updateNoshiNameOtherVisibility);
+                updateNoshiNameOtherVisibility();
+            }
         })();
     </script>
 </body>
