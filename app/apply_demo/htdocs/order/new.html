@@ -228,6 +228,14 @@
                             </div>
                         </fieldset>
 
+                        <fieldset class="summary-email-fieldset">
+                            <legend class="summary-email-legend serif">ご注文確認を受信するメールアドレス</legend>
+                            <div class="summary-email-row">
+                                <input type="email" name="order_confirm_email" id="order-confirm-email-input" class="input-underline summary-email-input" placeholder="例：example@example.com" autocomplete="email" aria-label="ご注文確認メールを受信するメールアドレス">
+                                <button type="button" class="btn-summary-email-verify" id="btn-order-email-verify">認証する</button>
+                            </div>
+                        </fieldset>
+
                         <div class="summary-actions">
                             <a href="confilm.html" class="btn btn-primary btn-full">確認画面へ進む</a>
                         </div>
@@ -237,6 +245,43 @@
             </div>
         </form>
     </main>
+
+    <div id="email-verify-modal" class="order-detail-modal" hidden aria-hidden="true">
+        <button type="button" class="order-detail-modal__backdrop js-email-verify-modal-close" aria-label="閉じる"></button>
+        <div class="order-detail-modal__panel email-verify-modal__panel" role="dialog" aria-modal="true" aria-labelledby="email-verify-modal-title">
+            <div class="order-detail-modal__header">
+                <h2 id="email-verify-modal-title" class="order-detail-modal__title serif">メール認証</h2>
+                <button type="button" class="order-detail-modal__close js-email-verify-modal-close" aria-label="閉じる">
+                    <span class="material-icons-outlined" aria-hidden="true">close</span>
+                </button>
+            </div>
+            <div class="order-detail-modal__body email-verify-modal__body">
+                <p class="email-verify-modal__text">ご指定のメールアドレスに認証コードを送信しました。<br>メールを確認し、下記にコードを入力してください。</p>
+                <p class="email-verify-modal__target" id="email-verify-modal-address" aria-live="polite"></p>
+                <div class="form-group email-verify-modal__code-group">
+                    <label for="email-verify-code-input">認証コード</label>
+                    <input type="text" name="email_verify_code" id="email-verify-code-input" class="input-underline email-verify-modal__code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="コードを入力">
+                </div>
+                <button type="button" class="btn btn-primary email-verify-modal__code-submit" id="btn-email-verify-code-submit">認証コードを送信</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="email-verify-done-modal" class="order-detail-modal" hidden aria-hidden="true">
+        <button type="button" class="order-detail-modal__backdrop js-email-verify-done-modal-close" aria-label="閉じる"></button>
+        <div class="order-detail-modal__panel email-verify-done-modal__panel" role="dialog" aria-modal="true" aria-labelledby="email-verify-done-modal-title">
+            <div class="order-detail-modal__header">
+                <h2 id="email-verify-done-modal-title" class="order-detail-modal__title serif">認証完了</h2>
+                <button type="button" class="order-detail-modal__close js-email-verify-done-modal-close" aria-label="閉じる">
+                    <span class="material-icons-outlined" aria-hidden="true">close</span>
+                </button>
+            </div>
+            <div class="order-detail-modal__body email-verify-done-modal__body">
+                <p class="email-verify-modal__text email-verify-done-modal__message">認証が完了しました。</p>
+                <a href="confilm.html" class="btn btn-primary btn-full email-verify-done-modal__link">ご注文の確認画面へ進む</a>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p class="copyright">©MARUYAMA NORI.Co.,Ltd. All rights reserved.</p>
@@ -530,6 +575,104 @@
                 noshiNameSelect.addEventListener('change', updateNoshiNameOtherVisibility);
                 updateNoshiNameOtherVisibility();
             }
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var modal = document.getElementById('email-verify-modal');
+            var doneModal = document.getElementById('email-verify-done-modal');
+            var emailInput = document.getElementById('order-confirm-email-input');
+            var openBtn = document.getElementById('btn-order-email-verify');
+            var codeSubmitBtn = document.getElementById('btn-email-verify-code-submit');
+            var addressEl = document.getElementById('email-verify-modal-address');
+            var codeInput = document.getElementById('email-verify-code-input');
+            if (!modal || !doneModal || !emailInput || !openBtn) return;
+
+            function openModal() {
+                modal.hidden = false;
+                modal.setAttribute('aria-hidden', 'false');
+                doneModal.hidden = true;
+                doneModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.add('order-detail-modal-open');
+                if (addressEl) {
+                    var v = emailInput.value.trim();
+                    addressEl.textContent = v ? '送信先：' + v : '';
+                }
+                if (codeInput) {
+                    codeInput.value = '';
+                    codeInput.focus();
+                }
+            }
+
+            function closeModal() {
+                modal.hidden = true;
+                modal.setAttribute('aria-hidden', 'true');
+                if (doneModal.hidden) {
+                    document.body.classList.remove('order-detail-modal-open');
+                    openBtn.focus();
+                }
+            }
+
+            function openDoneModal() {
+                modal.hidden = true;
+                modal.setAttribute('aria-hidden', 'true');
+                doneModal.hidden = false;
+                doneModal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('order-detail-modal-open');
+                var link = doneModal.querySelector('.email-verify-done-modal__link');
+                if (link) link.focus();
+            }
+
+            function closeDoneModal() {
+                doneModal.hidden = true;
+                doneModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('order-detail-modal-open');
+                openBtn.focus();
+            }
+
+            openBtn.addEventListener('click', function () {
+                if (!emailInput.value.trim()) {
+                    emailInput.focus();
+                    return;
+                }
+                if (emailInput.validity && emailInput.validity.typeMismatch) {
+                    emailInput.reportValidity();
+                    return;
+                }
+                openModal();
+            });
+
+            if (codeSubmitBtn && codeInput) {
+                codeSubmitBtn.addEventListener('click', function () {
+                    if (!codeInput.value.trim()) {
+                        codeInput.focus();
+                        return;
+                    }
+                    openDoneModal();
+                });
+            }
+
+            modal.addEventListener('click', function (e) {
+                if (e.target.closest('.js-email-verify-modal-close')) {
+                    closeModal();
+                }
+            });
+
+            doneModal.addEventListener('click', function (e) {
+                if (e.target.closest('.js-email-verify-done-modal-close')) {
+                    closeDoneModal();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key !== 'Escape') return;
+                if (!doneModal.hidden) {
+                    closeDoneModal();
+                } else if (!modal.hidden) {
+                    closeModal();
+                }
+            });
         })();
     </script>
 </body>
