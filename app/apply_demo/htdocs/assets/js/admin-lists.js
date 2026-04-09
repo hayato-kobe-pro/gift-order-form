@@ -301,10 +301,10 @@
                             : '<span class="muted">—</span>';
                     var detailHref = "order_detail.html?id=" + encodeURIComponent(o.id);
                     return (
-                        "<tr><td class=\"cell-date\">" +
-                        dateCell +
-                        "</td><td class=\"cell-management-no\">" +
+                        "<tr><td class=\"cell-management-no\">" +
                         mgmtCell +
+                        "</td><td class=\"cell-date\">" +
+                        dateCell +
                         "</td><td>" +
                         escapeHtml(o.ordererName) +
                         "</td><td class=\"cell-name2\">" +
@@ -325,10 +325,10 @@
             rows = U.sortOrdersByColumn(rows, sortState.col, sortState.dir);
             U.downloadCsv(
                 "applications_export.csv",
-                ["申し込み日時", "管理No.", "ご注文者", "お届け先宛名", "注文内容", "ID"],
+                ["管理No.", "申し込み日時", "ご注文者", "お届け先宛名", "注文内容", "ID"],
                 rows.map(function (o) {
                     var dt = o.appliedAt || o.date || "";
-                    return [dt, o.managementNo != null ? o.managementNo : "", o.ordererName, o.destName, o.content, o.id];
+                    return [o.managementNo != null ? o.managementNo : "", dt, o.ordererName, o.destName, o.content, o.id];
                 })
             );
         }
